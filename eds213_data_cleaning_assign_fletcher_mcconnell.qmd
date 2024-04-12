@@ -1,0 +1,28 @@
+---
+
+title: "EDS 213 HW 2 Data Cleaning"
+author: "Fletcher McConnell"
+date: "04-11-2024"
+
+---
+
+
+```{r}
+library(here)
+library(tidyverse)
+```
+
+
+
+```{r}
+setwd("~/Documents/EDS213/week2/bren-meds213-data-cleaning/data")
+
+
+snow_cover <- read_csv(here("data", "processed", "snow_cover.csv"))
+```
+
+
+```{r}
+
+```
+

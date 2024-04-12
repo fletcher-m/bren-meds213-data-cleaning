@@ -209,7 +209,7 @@ Last but not least, let's have a look at our species list
 species_presence |> 
   filter(Species_presence == 1) |> 
   count(Species) |> 
-  arrange(desc())
+  arrange(desc(Species_presence))
 ```
 
 We have 319 species observed in this table. The "convention" seems to be that `_` are used to separate the different parts of a name. Note that it is not clear what type of nomenclature reference is used to pull those names from.
