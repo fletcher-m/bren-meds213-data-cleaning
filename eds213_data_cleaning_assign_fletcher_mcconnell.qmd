@@ -1,6 +1,6 @@
 ---
 
-title: "EDS 213 HW 2 Data Cleaning"
+title: "EDS 213 Assignment 2 Data Cleaning"
 author: "Fletcher McConnell"
 date: "04-11-2024"
 
@@ -10,6 +10,7 @@ date: "04-11-2024"
 ```{r}
 library(here)
 library(tidyverse)
+library(dplyr)
 ```
 
 
@@ -17,12 +18,129 @@ library(tidyverse)
 ```{r}
 setwd("~/Documents/EDS213/week2/bren-meds213-data-cleaning/data")
 
+# read in data where snow_cover column is corrected
+general_cover <- read_csv(here("data", "processed", "snow_cover_fixed.csv"))
 
-snow_cover <- read_csv(here("data", "processed", "snow_cover.csv"))
+# check data types of columns
+glimpse(snow_cover)
+```
+
+## Cleaning Water_cover Column
+
+```{r, message=FALSE}
+# find non-numeric column values 
+general_cover |>  
+  count(Water_cover) |> 
+  filter(is.na(as.numeric(Water_cover)))
+```
+
+```{r, message=FALSE}
+# convert all non-numeric values to NA
+general_cover <- general_cover |>  
+  mutate(Water_cover = ifelse(Water_cover == "n/a", NA, Water_cover)) |> 
+  mutate(Water_cover = ifelse(Water_cover == "unk", NA, Water_cover))
+
+# check to make sure all non-numeric values are NA
+general_cover %>% 
+  count(Water_cover) |> 
+  filter(is.na(as.numeric(Water_cover)))
 ```
 
 
 ```{r}
+# convert Water_column to numeric data type
+general_cover <- general_cover |> 
+  mutate(Water_cover = as.numeric(Water_cover))
 
+# confirm data type has updated
+class(general_cover$Water_cover)
 ```
+
+
+```{r}
+# check if any values are over 100
+general_cover |>  
+  filter(Water_cover > 100) 
+
+# set values over 100 to NA
+general_cover <- general_cover |>  
+  mutate(Water_cover = ifelse(Water_cover > 100, NA, Water_cover))
+
+# check for negative values
+general_cover |>  
+  filter(Water_cover < 0) 
+```
+
+## Repeat Process for Land_cover Column
+
+```{r}
+# find non-numeric column values 
+general_cover |>  
+  count(Land_cover) |> 
+  filter(is.na(as.numeric(Land_cover)))
+```
+
+```{r}
+# convert all non-numeric values to NA
+general_cover <- general_cover %>% 
+  mutate(Land_cover = ifelse(Land_cover == "n/a", NA, Land_cover)) |> 
+  mutate(Land_cover = ifelse(Land_cover == "unk", NA, Land_cover))
+
+# check to make sure all non-numeric values are NA
+general_cover |>  
+  count(Land_cover) |> 
+  filter(is.na(as.numeric(Land_cover)))
+```
+
+```{r}
+# convert Land_column to numeric data type
+general_cover <- general_cover %>% 
+  mutate(Land_cover = as.numeric(Land_cover))
+
+# confirm data type has updated
+class(general_cover$Land_cover)
+```
+
+```{r}
+# check if any values are over 100 (none present)
+general_cover |> 
+  filter(Land_cover > 100) 
+
+# check for negative values
+general_cover |>  
+  filter(Land_cover < 0) 
+
+# convert -100 value to NA
+general_cover <- general_cover |>  
+  mutate(Land_cover = ifelse(Land_cover == -100, NA, Land_cover))
+
+# remove row with -298 value --> I chose to remove this row entirely, instead of making the value into NA, because I feel that the the value of 45 in the Snow_cover column cannot be trusted with how this row was input
+which(general_cover$Land_cover == -298)
+general_cover <- general_cover[-1222, ]
+```
+
+## More tidying of Total_cover column values
+
+```{r}
+# If value in Total_cover column does not equal 100 --> replace with "NA"
+# Originally, if the value in the Total_cover column was close to 100 (95, 105...), I was going to scale the values of the 3 columns to make the Total_cover value 100
+# I decided that, since the Total_cover column is not very important (it should always add up to 100), I would just convert any entry other than 100 to NA 
+
+# convert all values other than 100 in Total_cover column to NA
+general_cover <- general_cover |> 
+  mutate(Total_cover = ifelse(Total_cover == 100, Total_cover, NA))
+
+# check to make sure the Total_cover column only has values of 100 or NA
+unique(general_cover$Total_cover)
+```
+
+
+
+
+
+
+
+
+
+
 

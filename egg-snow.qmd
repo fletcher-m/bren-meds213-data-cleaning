@@ -1,6 +1,8 @@
 ---
 title: "Data Analaysis with the Arctic shorebird csv files"
 format: html
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -37,7 +39,7 @@ lemmings_csv <- "ASDN_Daily_pred_lemm.csv"
 Read the nest data in
 
 ```{r}
-nests_data <- read_csv(file.path(path_raw, nests_csv))
+nests_data <- read_csv("/Users/fletchermcconnell/Documents/EDS213/bren-meds213-data-analysis/data/raw/ASDN_Bird_nests.csv")
 
 glimpse(nests_data)
 ```
@@ -57,9 +59,10 @@ nests_month <- nests_data %>%
 Read the snow cover data in
 
 ```{r}
-snowcover_data <- read_csv(file.path(path_raw, snowcover_csv))
+snowcover_data <- read_csv(here("data", "processed", "snow_cover.csv"))
 
 glimpse(snowcover_data)
+
 ```
 
 The Date is stored as a character we thus first we need to transform the date in date format before computing the monthly aggregate:
@@ -94,6 +97,10 @@ Mmm the Dates are not what we were expecting... It generally means there are dif
 snowcover_data_fixed <- snowcover_data %>%
   mutate(Date = ifelse(Date == "8&9 june 06", "8 june 06", Date),
          Date2 = dmy(Date))
+```
+
+```{r}
+write_csv(snowcover_data_fixed, here("data", "processed", "snow_cover_fixed.csv"))
 ```
 
 
