@@ -1,13 +1,15 @@
 ---
-
 title: "EDS 213 Assignment 2 Data Cleaning"
 author: "Fletcher McConnell"
 date: "04-11-2024"
-
+warning: FALSE
+editor_options: 
+  chunk_output_type: console
 ---
 
+## Github Repository Link: https://github.com/fletcher-m/bren-meds213-data-cleaning
 
-```{r}
+```{r, message=FALSE}
 library(here)
 library(tidyverse)
 library(dplyr)
@@ -134,6 +136,11 @@ general_cover <- general_cover |>
 unique(general_cover$Total_cover)
 ```
 
+## Write csv for cleaned data
+
+```{r}
+# write_csv(general_cover, here("data", "processed", "all_cover_fixed_fletcher_mcconnell.csv"))
+```
 
 
 
