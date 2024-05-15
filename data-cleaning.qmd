@@ -9,8 +9,11 @@ editor_options:
 #| message: false  
 
 # Libraries
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(readr)
 library(here)
+library(naniar)
 
 setwd("~/Documents/EDS213/week2/bren-meds213-data-cleaning")
 
@@ -37,6 +40,13 @@ snowsurvey_csv <- read_csv(here("data", "raw", "ASDN_Snow_survey.csv"))
 
 glimpse(snowsurvey_csv)
 
+```
+
+Check NAs
+```{r}
+# percentage of NAs in each of the columns
+snowsurvey_csv |> 
+  miss_var_summary()
 ```
 
 Ok, the types are not what we were expecting for the percentages of cover. Let's find out why:
